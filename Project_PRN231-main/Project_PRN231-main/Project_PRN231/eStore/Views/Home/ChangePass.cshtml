@@ -1,0 +1,70 @@
+﻿@model BusinessObject.Res.AccRes
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/site.css">
+<!-- font awesome icon -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<body>
+    <div class="container bootstrap snippets bootdey">
+        <div class="row">
+            <div class="profile-info col-md-9">
+                <div class="panel">
+                    <div class="bio-graph-heading">
+                        Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
+                    </div>
+                    <div class="panel-body bio-graph-info">
+                        <h1>Change password</h1>
+                        <form asp-action="ChangePass" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="bio-row">
+                                    <p><span>New password </span>:  <input type="password" id="password" placeholder="Enter New Password" asp-for="Password"></p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>Confirm Password </span>:  <input type="password" id="confirm_password" placeholder="Enter Re-Password"></p>
+                                </div>
+                                <div class="bio-row">
+                                    <input type="submit">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var password = document.getElementById("password")
+            , confirm_password = document.getElementById("confirm_password");
+
+        function validatePassword() {
+            if (password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            }
+            else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
+</body>
+
+</html>

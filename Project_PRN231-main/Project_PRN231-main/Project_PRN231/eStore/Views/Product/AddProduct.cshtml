@@ -1,0 +1,170 @@
+﻿@using BusinessObject.Models
+@using BusinessObject.Res
+@using System.Collections
+@model BusinessObject.Res.ProductRes
+@{
+    ViewData["Title"] = "Create Product";
+    var categories = ViewData["categories"] as Category;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/dashboard.css">
+
+<!-- font awesome icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<body>
+    <div class="dashboards">
+        <input type="checkbox" id="menu-toggle">
+        <div class="sidebar">
+            <div class="side-content">
+                <div class="profile">
+                    <h4>WELCOME</h4>
+                </div>
+                <div class="side-menu">
+                    <ul>
+                        <li>
+                            <a href="">
+                                <span class="las la-home"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Order/OrderManager">
+                                <span class="las la-shopping-bag"></span>
+                                <small>Order</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="active" href="https://localhost:7290/Product/Products">
+                                <span class="las la-phone"></span>
+                                <small>Products</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Employee/Employees">
+                                <span class="las la-user"></span>
+                                <small>Employees</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Customer/Customers">
+                                <span class="las la-user"></span>
+                                <small>Customers</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <label for="menu-toggle">
+                        <span class="las la-bars"></span>
+                    </label>
+                    <div class="header-menu">
+                        <div class="user">
+                            <div class="bg-img" style="background-image: url(~/images/1.jpeg)"></div>
+                            <span class="las la-power-off"></span>
+                            <a href="https://localhost:7290/logout">
+                                <span class="las la-power-off"></span>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <div class="page-header">
+                    <h1>Add product</h1>
+                </div>
+                <div class="containerproduct">
+                    <form asp-action="AddProduct" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <img id="preview" src="#" width="120" height="100" class="hidden" />
+                        <br />
+                        @Html.TextBox("fileImage", "", new { type = "file", accept = "image/*"})
+                        <br />
+                        <table>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="ProductName"><b>ProductName(*)</b></label></td>
+                                <td><input asp-for="ProductName" type="text" placeholder="ProductName" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Unit"><b>UnitInPrice($)</b></label></td>
+                                <td><input asp-for="UnitPrice" type="text" placeholder="Enter UnitInPrice" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Unit"><b>UnitOnOrder($)</b></label></td>
+                                <td><input asp-for="UnitsOnOrder" type="text" placeholder="Enter UnitInPrice" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Quality"><b>Quality per unit($)</b></label></td>
+                                <td><input asp-for="QuantityPerUnit" type="text" placeholder="Enter Quality" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Reorderlevel"><b>Reorderlevel(*)</b></label></td>
+                                <td><input asp-for="ReorderLevel" type="text" placeholder="Enter level" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Reorderlevel"><b>Reorderlevel(*)</b></label></td>
+                                <td><input asp-for="ReorderLevel" type="text" placeholder="Enter level" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="UnitsInStock"><b>UnitsInStock(*)</b></label></td>
+                                <td><input asp-for="UnitsInStock" type="text" placeholder="Enter stock" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Reorderlevel"><b>Reorderlevel(*)</b></label></td>
+                                <td><input asp-for="ReorderLevel" type="text" placeholder="Enter level" required></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Discontinued"><b>Discontinued(*)</b></label></td>
+                                <td>
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="Discontinued" /> @Html.DisplayNameFor(model => model.Discontinued)
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 20px;"><label for="Category"><b>Category(*)</b></label></td>
+                                <td><select asp-for="@Model.CategoryId" asp-items="@(new SelectList(ViewBag.categories, "CategoryId", "CategoryName"))" class="select-field"></select></td>
+                            </tr>
+                        </table>
+                        <button type="submit">Submit</button>
+                    </form>
+
+                </div>
+
+
+            </main>
+
+        </div>
+    </div>
+    <script>
+        fileImage.onchange = evt => {
+            const [file] = fileImage.files
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                document.getElementById("preview").classList.remove("hidden");
+            }
+        }
+    </script>
+</body>
+</html>
+
+

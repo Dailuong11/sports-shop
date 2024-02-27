@@ -1,0 +1,303 @@
+﻿@using BusinessObject.Models
+@using BusinessObject.Res
+@model IEnumerable<BusinessObject.Res.CusRes>
+@{
+    var search = ViewData["search"] as string;
+    var title = ViewBag.Contact;
+    var pagination = ViewData["pagination"] as PaginationMetadata;
+    var currentPage = pagination!.CurrentPage;
+    HashSet<CusSelectRes> listTitle = ViewBag.Title;
+
+    var s = ViewBag.TotalCustomer;
+    var viewPage = ViewBag.ViewPage;
+    var month = ViewBag.renuve;
+    var employee = ViewBag.employee;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/dashboard.css">
+
+<!-- font awesome icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<body>
+    <div class="dashboards">
+        <div class="sidebar">
+            <div class="side-content">
+                <div class="profile">
+                    <h4>WELCOME</h4>
+                    <small>David</small>
+                </div>
+
+                <div class="side-menu">
+                    <ul>
+                        <li>
+                            <a href="">
+                                <span class="las la-home"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Order/OrderManager">
+                                <span class="las la-shopping-bag"></span>
+                                <small>Order</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Product/Products">
+                                <span class="las la-phone"></span>
+                                <small>Products</small>
+                            </a>
+                        </li>
+
+                        <!-- <li>
+                            <a href="">
+                                <span class="las la-shopping-cart"></span>
+                                <small>Orders</small>
+                            </a>
+                        </li> -->
+                        <li>
+                            <a href="https://localhost:7290/Employee/Employees">
+                                <span class="las la-user"></span>
+                                <small>Employees</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="active" href="https://localhost:7290/Customer/Customers">
+                                <span class="las la-user"></span>
+                                <small>Customers</small>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <header>
+                <div class="header-content">
+                    <div class="header-menu">
+                        <div class="user">
+                            <div class="bg-~/images/" style="background-image: url(~/images/1.jpeg)"></div>
+
+                            <a style="color: white" href="https://localhost:7290/logout">
+                                <span style="font-size: 14px" class="fa-solid fa-right-from-bracket"></span>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <main>
+
+                <div class="page-header">
+                    <h1>Customer</h1>
+
+                </div>
+
+                <div class="page-content">
+
+                    <div class="records table-responsive">
+
+                        <div class="record-header">
+                            <div class="add">
+                                <form asp-action="customers">
+                                    @if (title is not null)
+                                    {
+                                        <input type="hidden" name="title" value="@title">
+                                    }
+                                    @if (search is not null)
+                                    {
+                                        <input type="hidden" name="search" value="@search" />
+                                    }
+                                </form>
+                            </div>
+
+                            <div class="browse">
+                                <form asp-action="customers" defaultbutton="SubmitButton">
+                                    @if (search is not null)
+                                    {
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        <input type="search" placeholder="Search" name="search" value="@search" class="record-search">
+                                    }
+                                    else
+                                    {
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        <input type="search" placeholder="Search" name="search" class="record-search">
+                                    }
+                                </form>
+                                <form asp-action="customers">
+                                    <input type="hidden" name="search" value="@search" />
+                                    <input type="hidden" name="item" value="@ViewBag.Item" />
+                                    <div>
+                                        <span>Filter by contact title: </span>
+                                        <select name="title" id="" onchange="this.form.submit()">
+                                            <option value="">Remove selection</option>
+
+                                            @foreach (var i in listTitle)
+                                            {
+                                                @if (title is null)
+                                                {
+                                                    <option value="@i.ContactTitle">@i.ContactTitle</option>
+                                                }
+                                                else
+                                                {
+                                                    @if (title == i.ContactTitle)
+                                                    {
+                                                        <option value="@i.ContactTitle" selected>@i.ContactTitle</option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><span class=""></span> CONTACT NAME</th>
+                                        <th><span class=""></span> COMPANY NAME</th>
+                                        <th><span class=""></span> CONTACT TITLE</th>
+                                        <th><span class=""></span> ADDRESS</th>
+                                        <th><span class=""></span> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var customer in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="client">
+                                                    <div class="client-~/images/ bg-~/images/"
+                                                     style="background-image: url(~/images//3.jpeg)">
+                                                    </div>
+                                                    <div class="client-info">
+                                                        <h4>@customer.ContactName</h4>
+                                                        @if (customer.Email is not null)
+                                                        {
+                                                            <small>@customer.Email</small>
+                                                        }
+                                                        else
+                                                        {
+                                                            <small> - </small>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @customer.CompanyName
+                                            </td>
+                                            <td>
+                                                @customer.ContactTitle
+                                            </td>
+                                            <td>
+                                                @customer.Address
+                                            </td>
+                                            <td>
+                                                <div class="actions">
+                                                    <a asp-action="status" asp-route-id="@customer.CustomerId"><span style="font-size: 14px;" class="fa-solid fa-ban"></span></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="paging">
+                            <div class="pagination">
+                                @{
+                                    int start = currentPage - 3;
+                                    int end = currentPage + 3;
+                                    if (end > pagination.TotalPages)
+                                    {
+                                        start -= (end - pagination.TotalPages);
+                                    }
+                                    if (start <= 0)
+                                    {
+                                        end += ((start - 1) * (-1));
+                                        start = 1;
+                                    }
+                                    end = end > pagination.TotalPages ? pagination.TotalPages : end;
+                                }
+                                @if (currentPage == 1)
+                                {
+                                    <a href="#" class="disabled">&laquo;</a>
+                                }
+                                else
+                                {
+                                    string pageHref = $"https://localhost:7290/Customer/Customers?page={currentPage - 1}&itemsperpage=10";
+                                    if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                    if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                    pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                    <a href=@pageHref>&laquo;</a>
+
+                                }
+                                @for (int i = start; i <= end; i++)
+                                {
+                                    if (i == currentPage)
+                                    {
+                                        string pageHref = $"https://localhost:7290/Customer/Customers?page={i}&itemsperpage=10";
+                                        if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                        if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                        pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                        <a href=@pageHref class="active">@i</a>
+                                    }
+                                    else
+                                    {
+                                        string pageHref = $"https://localhost:7290/Customer/Customers?page={i}&itemsperpage=10";
+                                        if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                        if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                        pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                        <a href=@pageHref>@i</a>
+                                    }
+                                }
+                                @if (currentPage == pagination.TotalPages)
+                                {
+                                    <a href="#" class="disabled">&raquo;</a>
+                                }
+                                else
+                                {
+                                    string pageHref = $"https://localhost:7290/Customer/Customers?page={currentPage + 1}&itemsperpage=10";
+                                    if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                    if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                    pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                    <a href=@pageHref>&raquo;</a>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+﻿@using BusinessObject.Models
+@using BusinessObject.Res
+@{
+
+    CusRes cus = ViewBag.Customer;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/site.css">
+<!-- font awesome icon -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<body>
+    <div class="container bootstrap snippets bootdey">
+        <div class="row">
+            <div class="profile-nav col-md-3">
+                <div class="panel">
+                    <div class="user-heading round">
+                        <a href="#">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                        </a>
+                        <h1>@cus.ContactName</h1>
+                        <p>@Model.Email</p>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-info col-md-9">
+                <div class="panel">
+                    <div class="bio-graph-heading">
+                        Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
+                    </div>
+                    <div class="panel-body bio-graph-info">
+                        <h1>Bio Graph</h1>
+                        <form asp-action="Profile" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="bio-row">
+                                    <p><span>Name </span>: @cus.ContactName</p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>Country </span>: @cus.Address</p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>Title</span>: @cus.ContactTitle</p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>CompanyName </span>: @cus.CompanyName</p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>Email </span>: @Model.Email</p>
+                                </div>
+                                <div class="bio-row">
+                                    <div class="data">
+                                        <a asp-action="EditProfile" asp-route-id="@cus.CustomerId">Edit profile</a>
+                                    </div>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>Phone </span>: 88 (02) 123456</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+﻿@using BusinessObject.Models
+@using BusinessObject.Res
+@model IEnumerable<BusinessObject.Res.OrderRes>
+@{
+    var from = ViewData["from"] as string;
+    var to = ViewData["to"] as string;
+    var pagination = ViewData["pagination"] as PaginationMetadata;
+    var currentPage = pagination!.CurrentPage;
+    var s = ViewBag.TotalCustomer;
+    var viewPage = ViewBag.ViewPage;
+    var month = ViewBag.renuve;
+    var employee = ViewBag.employee;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/dashboard.css">
+
+<!-- font awesome icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<body>
+    <div class="dashboards">
+        <input type="checkbox" id="menu-toggle">
+        <div class="sidebar">
+
+            <div class="side-content">
+                <div class="profile">
+                    <h4>WELCOME</h4>
+                </div>
+
+                <div class="side-menu">
+                    <ul>
+                        <li>
+                            <a href="https://localhost:7290/Order/OrderManager">
+                                <span class="las la-shopping-bag"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="active" href="https://localhost:7290/Order/OrderManager">
+                                <span class="las la-shopping-bag"></span>
+                                <small>Order</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Product/Products">
+                                <span class="las la-phone"></span>
+                                <small>Products</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Employee/Employees">
+                                <span class="las la-user"></span>
+                                <small>Employees</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Customer/Customers">
+                                <span class="las la-user"></span>
+                                <small>Customers</small>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <header>
+                <div class="header-content">
+                    <div class="header-menu">
+                        <div class="user">
+                            <div class="bg-img" style="background-image: url(~/images/1.jpeg)"></div>
+
+                            <a style="color: white" href="https://localhost:7290/logout">
+                                <span style="font-size: 14px" class="fa-solid fa-right-from-bracket"></span>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <main>
+
+                <div class="page-header">
+                    <h1>Order</h1>
+                </div>
+
+                <div class="page-content">
+                    <div class="records table-responsive">
+
+                        <div class="record-header">
+                            <div class="browse">
+                                <span>Filter by order date</span>
+                                <form asp-action="OrderManager">
+                                    @if (from is not null)
+                                    {
+
+                                        <input type="date" placeholder="From date" name="from" value="@from" class="record-search">
+                                    }
+                                    else
+                                    {
+
+                                        <input type="date" placeholder="From date" name="from" class="record-search">
+                                    }
+                                    @if (to is not null)
+                                    {
+
+                                        <input type="date" placeholder="To date" name="to" value="@to" class="record-search">
+                                    }
+                                    else
+                                    {
+
+                                        <input type="date" placeholder="To date" name="to" class="record-search">
+                                    }
+                                    <input type="submit" style="position: absolute; left: -9999px" />
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <th><span class=""></span> OrderID</th>
+                                    <th><span class=""></span> OrderDate</th>
+                                    <th><span class=""></span> RequiredDate</th>
+                                    <th><span class=""></span> ShippedDate</th>
+                                    <th><span class=""></span> Employee</th>
+                                    <th><span class=""></span> Freight($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td>@order.OrderId</td>
+                                        <td>
+                                            @order.OrderDate
+                                        </td>
+                                        <td>
+                                            @order.RequiredDate
+                                        </td>
+                                        <td>
+                                            @order.ShippedDate
+                                        </td>
+                                        <td>
+                                            @order.emp.FullName
+                                        </td>
+
+                                        <td>
+                                            @order.Freight
+                                        </td>
+
+                                        <td>
+                                            <div class="actions">
+                                                <span class="lab la-telegram-plane"></span>
+                                                <span class="las la-eye"></span>
+                                                <span class="las la-ellipsis-v"></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="paging">
+                        <div class="pagination">
+                            @{
+                                int start = currentPage - 3;
+                                int end = currentPage + 3;
+                                if (end > pagination.TotalPages)
+                                {
+                                    start -= (end - pagination.TotalPages);
+                                }
+                                if (start <= 0)
+                                {
+                                    end += ((start - 1) * (-1));
+                                    start = 1;
+                                }
+                                end = end > pagination.TotalPages ? pagination.TotalPages : end;
+                            }
+                            @if (currentPage == 1)
+                            {
+                                <a href="#" class="disabled">&laquo;</a>
+                            }
+                            else
+                            {
+                                var pageHref = $"https://localhost:7290/Order/OrderManager?page={currentPage - 1}&itemsperpage=10";
+                                if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                <a href=@pageHref>&laquo;</a>
+                            }
+                            @for (int i = start; i <= end; i++)
+                            {
+                                if (i == currentPage)
+                                {
+                                    var pageHref = $"https://localhost:7290/Order/OrderManager?page={i}&itemsperpage=10";
+
+                                    if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                    if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                    <a href=@pageHref class="active">@i</a>
+                                }
+                                else
+                                {
+                                    var pageHref = $"https://localhost:7290/Order/OrderManager?page={i}&itemsperpage=10";
+                                    if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                    if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                    <a href=@pageHref>@i</a>
+                                }
+                            }
+                            @if (currentPage == pagination.TotalPages)
+                            {
+                                <a href="#" class="disabled">&raquo;</a>
+                            }
+                            else
+                            {
+                                var pageHref = $"https://localhost:7290/Order/OrderManager?page={currentPage + 1}&itemsperpage=10";
+                                if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                <a href=@pageHref>&raquo;</a>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+    </div>
+
+    </div>
+
+    </main>
+
+    </div>
+    </div>
+</body>
+
+</html>
+
+

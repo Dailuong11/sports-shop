@@ -1,0 +1,120 @@
+/* ----------------------------------------------------------
+    :: Template Name: Karl - Fashion Ecommerce Template
+    :: Author: Colorlib
+    :: Author URL: https://colorlib.com
+    :: Description: Karl is smart & elegant fashion e-commerce Template. It's suitable for all e-commerce business platform. It's super responsive for all      Desktop/Mobile layout.
+    :: Version: 1.0
+    :: Created: 09 January 2018
+    :: Last Updated: 09 January 2018
+    ---------------------------------------------------------- */
+
+/* -------------------------------------------------
+    ============ PLACE YOUR CUSTOM CSS HERE ============
+    ------------------------------------------------- */
+.bg1 {
+    background-image: url(img/bg-img/menclothing.jpg);
+}
+
+.bg2 {
+    background-image: url(img/bg-img/kidshoes.jpg);
+}
+
+.bg3 {
+    background-image: url(img/bg-img/bag.jpg);
+}
+
+.bg4 {
+    background-image: url(img/bg-img/hydration.jpg);
+}
+
+.bg5 {
+    background-image: url(img/bg-img/buffgorras.jpg);
+}
+
+.product1 {
+    background-image: url(img/product-img/product-1.jpg);
+}
+
+.product2 {
+    background-image: url(img/product-img/product-2.jpg);
+}
+
+.product3 {
+    background-image: url(img/product-img/product-3.jpg);
+}
+
+.product4 {
+    background-image: url(img/product-img/product-4.jpg);
+}
+
+.product5 {
+    background-image: url(img/product-img/product-5.jpg);
+}
+
+.product6 {
+    background-image: url(img/product-img/product-6.jpg);
+}
+
+.product7 {
+    background-image: url(img/product-img/product-7.jpg);
+}
+
+.product8 {
+    background-image: url(img/product-img/product-8.jpg);
+}
+
+.product9 {
+    background-image: url(img/product-img/product-9.jpg);
+}
+
+.product10 {
+    background-image: url(img/product-img/product-10.jpg);
+}
+
+.product1 {
+    background-image: url(img/product-img/product-1.jpg);
+}
+
+.product11 {
+    background-image: url(img/product-img/product-11.jpg);
+}
+
+.product12 {
+    background-image: url(img/product-img/product-12.jpg);
+}
+
+.button-24 {
+    background: #FF4742;
+    border: 1px solid #FF4742;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 16px;
+    min-height: 40px;
+    outline: 0;
+    padding: 12px 14px;
+    text-align: center;
+    text-rendering: geometricprecision;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+}
+
+    .button-24:hover,
+    .button-24:active {
+        background-color: initial;
+        background-position: 0 0;
+        color: #FF4742;
+    }
+
+    .button-24:active {
+        opacity: .5;
+    }

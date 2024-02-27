@@ -1,0 +1,316 @@
+﻿@using BusinessObject.Models
+@using BusinessObject.Res
+@model IEnumerable<BusinessObject.Res.ProductRes>
+@{
+    var search = ViewData["search"] as string;
+    var categoryId = ViewBag.categoryId;
+    var pagination = ViewData["pagination"] as PaginationMetadata;
+    var currentPage = pagination!.CurrentPage;
+    var s = ViewBag.TotalCustomer;
+    var viewPage = ViewBag.ViewPage;
+    var month = ViewBag.renuve;
+    var employee = ViewBag.employee;
+    List<CateSelectRes> categories = ViewBag.categories;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/dashboard.css">
+
+<!-- font awesome icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<body>
+    <div class="dashboards">
+        <input type="checkbox" id="menu-toggle">
+        <div class="sidebar">
+
+            <div class="side-content">
+                <div class="profile">
+                    <h4>WELCOME</h4>
+                </div>
+
+                <div class="side-menu">
+                    <ul>
+                        <li>
+                            <a href="">
+                                <span class="las la-home"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Order/OrderManager">
+                                <span class="las la-shopping-bag"></span>
+                                <small>Order</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="active" href="https://localhost:7290/Product/Products">
+                                <span class="las la-phone"></span>
+                                <small>Products</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Employee/Employees">
+                                <span class="las la-user"></span>
+                                <small>Employees</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Customer/Customers">
+                                <span class="las la-user"></span>
+                                <small>Customers</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <header>
+                <div class="header-content">
+
+                    <div class="header-menu">
+                        <div class="user">
+                            <div class="bg-img" style="background-image: url(~/images/1.jpeg)"></div>
+
+                            <a style="color: white" href="https://localhost:7290/logout">
+                                <span style="font-size: 14px" class="fa-solid fa-right-from-bracket"></span>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <main>
+
+                <div class="page-header">
+                    <h1>Product List</h1>
+                </div>
+
+                <div class="page-content">
+                    <div class="records table-responsive">
+
+                        <div class="record-header">
+                            <div class="add" style="float: right;">
+                                <a asp-action="AddProduct"><button>Add Product</button></a>
+                            </div>
+                            <div class="browse">
+                                <form asp-action="products" defaultbutton="SubmitButton">
+                                    @if (search is not null)
+                                    {
+                                        @if (categoryId is not null)
+                                        {
+                                            <input type="hidden" name="categoryId" value="@categoryId">
+                                        }
+                                        @if (@ViewBag.Item is not null)
+                                        {
+                                            <input type="hidden" name="Item" value="@ViewBag.Item">
+                                        }
+                                        <input type="search" placeholder="Search" name="search" value="@search" class="record-search">
+                                    }
+                                    else
+                                    {
+                                        @if (categoryId is not null)
+                                        {
+                                            <input type="hidden" name="categoryId" value="@categoryId">
+                                        }
+                                        @if (@ViewBag.Item is not null)
+                                        {
+                                            <input type="hidden" name="categoryId" value="@ViewBag.Item">
+                                        }
+                                        <input type="search" placeholder="Search" name="search" class="record-search">
+                                    }
+                                </form>
+                                <form asp-action="products">
+                                    <input type="hidden" name="search" value="@search" />
+                                    @if (@ViewBag.Item is not null)
+                                    {
+                                        <input type="hidden" name="Item" value="@ViewBag.Item">
+                                    }
+                                    <div>
+                                        <span>Filter by category: </span>
+                                        <select name="categoryId" id="" onchange="this.form.submit()">
+                                            <option value="">Remove selection</option>
+
+                                            @foreach (var i in categories)
+                                            {
+                                                @if (categoryId is null)
+                                                {
+                                                    <option value="@i.CategoryId">@i.CategoryName</option>
+                                                }
+                                                else
+                                                {
+                                                    @if (categoryId == i.CategoryId)
+                                                    {
+                                                        <option value="@i.CategoryId" selected>@i.CategoryName</option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><span class=""></span> Image</th>
+                                        <th><span class=""></span> ProductName</th>
+                                        <th><span class=""></span> UnitPrice</th>
+                                        <th><span class=""></span> QuantityPerUnit</th>
+                                        <th><span class=""></span> UnitsInStock</th>
+                                        <th><span class=""></span> Category</th>
+                                        <th><span class=""></span> UnitsOnOrder</th>
+                                        <th><span class=""></span> ReorderLevel</th>
+                                        <th><span class=""></span> Discontinued</th>
+                                        <th><span class=""></span> Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @* @ViewData["deleteProduct"]*@
+                                    @foreach (var product in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @{
+                                                    string imgDataURL = "";
+                                                    if (product.Picture is not null)
+                                                    {
+                                                        string imgBase64 = Convert.ToBase64String(product.Picture);
+                                                        imgDataURL = string.Format("data:image;base64,{0}", imgBase64);
+                                                    }
+                                                }
+
+                                                <div class="client">
+                                                    <div class="client-img bg-img"
+                                                     style="background-image: url(@imgDataURL)">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @product.ProductName
+                                            </td>
+                                            <td>
+                                                @product.UnitPrice
+                                            </td>
+                                            <td>
+                                                @product.QuantityPerUnit
+                                            </td>
+                                            <td>
+                                                @product.UnitsInStock
+                                            </td>
+                                            <td>
+                                                @product.CategoryName
+                                            </td>
+                                            <td>
+                                                @product.UnitsOnOrder
+                                            </td>
+                                            <td>
+                                                @product.ReorderLevel
+                                            </td>
+                                            <td>
+                                                @product.Discontinued
+                                            </td>
+                                            <td>
+                                                <div class="actions">
+                                                    <a asp-action="DeleteProduct" asp-route-id="@product.ProductId"> <span style="font-size: 14px;" class="fa-solid fa-ban"></span></a>
+                                                    <a asp-action="EditProduct" asp-route-id="@product.ProductId"><span style="font-size: 14px;" class="fa-solid fa-pen-to-square"></span></a>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="paging">
+                            <div class="pagination">
+                                @{
+                                    int start = currentPage - 3;
+                                    int end = currentPage + 3;
+                                    if (end > pagination.TotalPages)
+                                    {
+                                        start -= (end - pagination.TotalPages);
+                                    }
+                                    if (start <= 0)
+                                    {
+                                        end += ((start - 1) * (-1));
+                                        start = 1;
+                                    }
+                                    end = end > pagination.TotalPages ? pagination.TotalPages : end;
+                                }
+                                @if (currentPage == 1)
+                                {
+                                    <a href="#" class="disabled">&laquo;</a>
+                                }
+                                else
+                                {
+                                    var pageHref = $"https://localhost:7290/Product/Products?page={currentPage - 1}&itemsperpage=10";
+                                    if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                    if (categoryId is not null) pageHref = $"{pageHref}&categoryId={categoryId}";
+                                    pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                    <a href=@pageHref>&laquo;</a>
+                                }
+                                @for (int i = start; i <= end; i++)
+                                {
+                                    if (i == currentPage)
+                                    {
+                                        var pageHref = $"https://localhost:7290/Product/Products?page={i}&itemsperpage=10";
+                                        if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                        if (categoryId is not null) pageHref = $"{pageHref}&dep={categoryId}";
+                                        pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                        <a href=@pageHref class="active">@i</a>
+                                    }
+                                    else
+                                    {
+                                        var pageHref = $"https://localhost:7290/Product/Products?page={i}&itemsperpage=10";
+                                        if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                        if (categoryId is not null) pageHref = $"{pageHref}&categoryId={categoryId}";
+                                        pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                        <a href=@pageHref>@i</a>
+                                    }
+                                }
+                                @if (currentPage == pagination.TotalPages)
+                                {
+                                    <a href="#" class="disabled">&raquo;</a>
+                                }
+                                else
+                                {
+                                    var pageHref = $"https://localhost:7290/Product/Products?page={currentPage + 1}&itemsperpage=10";
+                                    if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                    if (categoryId is not null) pageHref = $"{pageHref}&categoryId={categoryId}";
+                                    pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                    <a href=@pageHref>&raquo;</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+

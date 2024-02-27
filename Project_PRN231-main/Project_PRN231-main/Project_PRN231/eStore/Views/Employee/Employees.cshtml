@@ -1,0 +1,512 @@
+﻿@using BusinessObject.Models
+@using BusinessObject.Res
+@model IEnumerable<BusinessObject.Res.EmpRes>
+@{
+    var search = ViewData["search"] as string;
+    var from = ViewData["from"] as string;
+    var to = ViewData["to"] as string;
+    var dep = ViewBag.Dep;
+    var courtesy = ViewData["courtesy"] as string;
+    var title = ViewData["title"] as string;
+    var pagination = ViewData["pagination"] as PaginationMetadata;
+    var currentPage = pagination!.CurrentPage;
+    List<DepSelectRes> departments = ViewBag.departments;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var s = ViewBag.TotalCustomer;
+    var viewPage = ViewBag.ViewPage;
+    var month = ViewBag.renuve;
+    var employee = ViewBag.employee;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- css file -->
+<link rel="stylesheet" href="~/dashboard.css">
+
+<!-- font awesome icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<body onload="setup()">
+    <div class="dashboards">
+        <input type="checkbox" id="menu-toggle">
+        <div class="sidebar">
+            <div class="side-content">
+                <div class="profile">
+                    <h4>WELCOME</h4>
+                    <small>David</small>
+                </div>
+
+                <div class="side-menu">
+                    <ul>
+                        <li>
+                            <a href="">
+                                <span class="las la-home"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Order/OrderManager">
+                                <span class="las la-shopping-bag"></span>
+                                <small>Order</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Product/Products">
+                                <span class="las la-phone"></span>
+                                <small>Products</small>
+                            </a>
+                        </li>
+
+                        <!-- <li>
+                            <a href="">
+                                <span class="las la-shopping-cart"></span>
+                                <small>Orders</small>
+                            </a>
+                        </li> -->
+                        <li>
+                            <a class="active" href="https://localhost:7290/Employee/Employees">
+                                <span class="las la-user"></span>
+                                <small>Employees</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://localhost:7290/Customer/Customers">
+                                <span class="las la-user"></span>
+                                <small>Customers</small>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <header>
+                <div class="header-content">
+                    <div class="header-menu">
+                        <div class="header-menu">
+                            <div class="user">
+                                <div class="bg-img" style="background-image: url(~/images/1.jpeg)"></div>
+                                <a href="https://localhost:7290/logout">
+                                    <span class="las la-power-off"></span>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <main>
+
+                <div class="page-header">
+                    <h1>Employees</h1>
+
+                </div>
+
+                <div class="page-content">
+                    <div class="records table-responsive">
+
+                        <div class="record-header">
+                            <div class="add">
+                                <form asp-action="employees">
+                                    @if (search is not null)
+                                    {
+                                        <input type="hidden" name="search" value="@search" />
+                                    }
+                                    @if (dep is not null)
+                                    {
+                                        <input type="hidden" name="dep" value="@dep">
+                                    }
+                                    @if (courtesy is not null)
+                                    {
+                                        <input type="hidden" name="courtesy" value="@courtesy">
+                                    }
+                                    @if (title is not null)
+                                    {
+                                        <input type="hidden" name="title" value="@title">
+                                    }
+                                    @if (from is not null)
+                                    {
+                                        <input type="hidden" name="from" value="@from">
+                                    }
+                                    @if (to is not null)
+                                    {
+                                        <input type="hidden" name="from" value="@to">
+                                    }
+                                </form>
+                                <form asp-action="upload" enctype="multipart/form-data" method="post">
+                                    <label for="actual-btn" style="  background-color: lightgreen; color: white; padding: 0.5rem; font-family: sans-serif; border-radius: 0.3rem;cursor: pointer;
+                                        margin-top: 1rem;">Choose File</label>
+                                    <input type="file" name="file" id="actual-btn" hidden onchange="this.form.submit()" />
+                                </form>
+                            </div>
+
+                            <div class="browse">
+                                <form asp-action="employees" defaultbutton="SubmitButton">
+                                    @if (search is not null)
+                                    {
+                                        @if (dep is not null)
+                                        {
+                                            <input type="hidden" name="dep" value="@dep">
+                                        }
+                                        @if (courtesy is not null)
+                                        {
+                                            <input type="hidden" name="courtesy" value="@courtesy">
+                                        }
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        @if (from is not null)
+                                        {
+                                            <input type="hidden" name="from" value="@from">
+                                        }
+                                        @if (to is not null)
+                                        {
+                                            <input type="hidden" name="from" value="@to">
+                                        }
+                                        <input type="hidden" name="item" value="@ViewBag.Item">
+                                        <input type="search" placeholder="Search name" name="search" value="@search" class="record-search">
+                                    }
+                                    else
+                                    {
+                                        @if (dep is not null)
+                                        {
+                                            <input type="hidden" name="dep" value="@dep">
+                                        }
+                                        @if (courtesy is not null)
+                                        {
+                                            <input type="hidden" name="courtesy" value="@courtesy">
+                                        }
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        @if (from is not null)
+                                        {
+                                            <input type="hidden" name="from" value="@from">
+                                        }
+                                        @if (to is not null)
+                                        {
+                                            <input type="hidden" name="from" value="@to">
+                                        }
+                                        <input type="hidden" name="item" value="@ViewBag.Item">
+                                        <input type="search" placeholder="Search name" name="search" class="record-search">
+                                    }
+                                </form>
+
+
+                            </div>
+                            <div class="browse">
+                                <form style="display:flex" asp-action="employees">
+                                    @if (from is not null)
+                                    {
+                                        @if (search is not null)
+                                        {
+                                            <input type="hidden" name="search" value="@search" />
+                                        }
+                                        @if (dep is not null)
+                                        {
+                                            <input type="hidden" name="dep" value="@dep">
+                                        }
+                                        @if (courtesy is not null)
+                                        {
+                                            <input type="hidden" name="courtesy" value="@courtesy">
+                                        }
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        <input type="hidden" name="item" value="@ViewBag.Item">
+                                        <div>
+                                            <span>Hire date: </span>
+                                            <input type="date" placeholder="From date" name="from" value="@from" class="record-search">
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @if (search is not null)
+                                        {
+                                            <input type="hidden" name="search" value="@search" />
+                                        }
+                                        @if (dep is not null)
+                                        {
+                                            <input type="hidden" name="dep" value="@dep">
+                                        }
+                                        @if (courtesy is not null)
+                                        {
+                                            <input type="hidden" name="courtesy" value="@courtesy">
+                                        }
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        <input type="hidden" name="item" value="@ViewBag.Item">
+                                        <div>
+                                            <span>Hire date: </span>
+                                            <input type="date" placeholder="From date" name="from" class="record-search">
+                                        </div>
+                                    }
+                                    @if (to is not null)
+                                    {
+                                        @if (search is not null)
+                                        {
+                                            <input type="hidden" name="search" value="@search" />
+                                        }
+                                        @if (dep is not null)
+                                        {
+                                            <input type="hidden" name="dep" value="@dep">
+                                        }
+                                        @if (courtesy is not null)
+                                        {
+                                            <input type="hidden" name="courtesy" value="@courtesy">
+                                        }
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        <input type="hidden" name="item" value="@ViewBag.Item">
+                                        <input type="date" placeholder="To date" name="to" value="@to" class="record-search">
+                                    }
+                                    else
+                                    {
+                                        @if (search is not null)
+                                        {
+                                            <input type="hidden" name="search" value="@search" />
+                                        }
+                                        @if (dep is not null)
+                                        {
+                                            <input type="hidden" name="dep" value="@dep">
+                                        }
+                                        @if (courtesy is not null)
+                                        {
+                                            <input type="hidden" name="courtesy" value="@courtesy">
+                                        }
+                                        @if (title is not null)
+                                        {
+                                            <input type="hidden" name="title" value="@title">
+                                        }
+                                        <input type="hidden" name="item" value="@ViewBag.Item">
+                                        <input type="date" placeholder="To date" name="to" class="record-search">
+                                    }
+                                    <input type="submit" style="position: absolute; left: -9999px" />
+                                </form>
+                            </div>
+                            <div class="browse">
+                                <form style="display: flex" asp-action="employees">
+                                    <input type="hidden" name="item" value="@ViewBag.Item">
+                                    <input type="hidden" name="search" value="@search" />
+                                    <input type="hidden" name="from" value="@from" />
+                                    <input type="hidden" name="to" value="@to" />
+                                    <div>
+                                        <span>Filter by department: </span>
+                                        <select name="dep" id="" onchange="this.form.submit()">
+                                            <option value="">Remove selection</option>
+
+                                            @foreach (var i in departments)
+                                            {
+                                                @if (dep is null)
+                                                {
+                                                    <option value="@i.DepartmentId">@i.DepartmentName</option>
+                                                }
+                                                else
+                                                {
+                                                    @if (dep == i.DepartmentId)
+                                                    {
+                                                        <option value="@i.DepartmentId" selected>@i.DepartmentName</option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <span>Filter by title: </span>
+                                        <select name="title" id="" onchange="this.form.submit()">
+                                            <option value="">Remove selection</option>
+                                            @foreach (var i in Model.Select(x => x.Title).ToHashSet())
+                                            {
+                                                string empTitle = i!;
+                                                @if (empTitle == title)
+                                                {
+                                                    <option value="@i" selected>@i</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@i">@i</option>
+
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <th><span class=""></span> EMPLOYEE NAME</th>
+                                        <th><span class=""></span> DEPARTMENT</th>
+                                        <th><span class=""></span> HIRE DATE</th>
+                                        <th><span class=""></span> TITLE OF COURTESY</th>
+                                        <th><span class=""></span> TITLE</th>
+                                        <th><span class=""></span> ADDRESS</th>
+                                        <th><span class=""></span> ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var employe in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="client">
+                                                    <div class="client-~/images/ bg-~/images/"
+                                                     style="background-image: url(~/images//3.jpeg)">
+                                                    </div>
+                                                    <div class="client-info">
+                                                        <h4>@employe.LastName @employe.FirstName</h4>
+                                                        @if (employe.Email is not null)
+                                                        {
+                                                            <small>@employe.Email</small>
+                                                        }
+                                                        else
+                                                        {
+                                                            <small> - </small>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @employe.Department
+                                            </td>
+                                            <td>
+                                                @employe.HireDateString
+                                            </td>
+                                            <td>
+                                                @employe.TitleOfCourtesy
+                                            </td>
+                                            <td>
+                                                @employe.Title
+                                            </td>
+                                            <td>
+                                                @employe.Address
+                                            </td>
+                                            <td>
+                                                <div class="actions">
+                                                    <a asp-action="status" asp-route-id="@employe.EmployeeId"><span style="font-size: 14px;" class="fa-solid fa-ban"></a>
+                                                    <a asp-action="edit" asp-route-id="@employe.EmployeeId"><span style="font-size: 14px;" class="fa-solid fa-pen-to-square"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="paging">
+                            <div class="pagination">
+                                @{
+                                    int start = currentPage - 3;
+                                    int end = currentPage + 3;
+                                    if (end > pagination.TotalPages)
+                                    {
+                                        start -= (end - pagination.TotalPages);
+                                    }
+                                    if (start <= 0)
+                                    {
+                                        end += ((start - 1) * (-1));
+                                        start = 1;
+                                    }
+                                    end = end > pagination.TotalPages ? pagination.TotalPages : end;
+                                }
+                                @if (title is not null) title = title!.Replace(" ", "%20");
+                                @if (currentPage == 1)
+                                {
+                                    <a href="#" class="disabled">&laquo;</a>
+                                }
+                                else
+                                {
+                                    var pageHref = $"https://localhost:7290/Employee/Employees?page={currentPage - 1}&itemsperpage=10";
+                                    if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                    if (dep is not null) pageHref = $"{pageHref}&dep={dep}";
+                                    if (courtesy is not null) pageHref = $"{pageHref}&courtesy={courtesy}";
+                                    if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                    if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                    if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                    pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                    <a href=@pageHref>&laquo;</a>
+                                }
+                                @for (int i = start; i <= end; i++)
+                                {
+                                    if (i == currentPage)
+                                    {
+                                        var pageHref = $"https://localhost:7290/Employee/Employees?page={i}&itemsperpage=10";
+                                        if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                        if (dep is not null) pageHref = $"{pageHref}&dep={dep}";
+                                        if (courtesy is not null) pageHref = $"{pageHref}&courtesy={courtesy}";
+                                        if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                        if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                        if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                        pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                        <a href=@pageHref class="active">@i</a>
+                                    }
+                                    else
+                                    {
+                                        var pageHref = $"https://localhost:7290/Employee/Employees?page={i}&itemsperpage=10";
+                                        if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                        if (dep is not null) pageHref = $"{pageHref}&dep={dep}";
+                                        if (courtesy is not null) pageHref = $"{pageHref}&courtesy={courtesy}";
+                                        if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                        if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                        if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                        pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                        <a href=@pageHref>@i</a>
+                                    }
+                                }
+                                @if (currentPage == pagination.TotalPages)
+                                {
+                                    <a href="#" class="disabled">&raquo;</a>
+                                }
+                                else
+                                {
+                                    var pageHref = $"https://localhost:7290/Employee/Employees?page={currentPage + 1}&itemsperpage=10";
+                                    if (search is not null) pageHref = $"{pageHref}&search={search}";
+                                    if (dep is not null) pageHref = $"{pageHref}&dep={dep}";
+                                    if (courtesy is not null) pageHref = $"{pageHref}&courtesy={courtesy}";
+                                    if (title is not null) pageHref = $"{pageHref}&title={title}";
+                                    if (from is not null) pageHref = $"{pageHref}&from={from}";
+                                    if (to is not null) pageHref = $"{pageHref}&to={to}";
+                                    pageHref = $"{pageHref}&item={ViewBag.Item}";
+                                    <a href=@pageHref>&raquo;</a>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+    </div>
+</body>
+<script>
+</script>
+</html>
+
+
